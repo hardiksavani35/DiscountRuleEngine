@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Services\DiscountService;
-use Illuminate\Http\Request;
-use App\Models\Discount;
+use Illuminate\Http\Request; 
 
 class DiscountController extends Controller
 {
@@ -32,7 +31,7 @@ class DiscountController extends Controller
  
         try {
             $data    = $this->discountService->applyDiscount($request->all());
-            $message = "The cart total is not eligible for any discount.";                    
+            $message = count($data) > 3 ? "Discount successfully applied." : "No discounts apply to the current cart total.";
             $status  = true;
             $code    = 200;
         } catch (Exception $e) { 
