@@ -19,21 +19,26 @@ class NoDiscountAvailable extends TestCase
         $response->assertStatus(200);
     }
 
+    //This discount will not be applicable because there are two available discounts:
+
+    //A discount requiring a minimum cart total of $600 with applies_to_all_categories = true (no category restrictions).
+    //A discount requiring a minimum cart total of $200 with applies_to_all_categories = false (specific category restriction).
+    //Since the subtotal is $500, the second discount meets the minimum cart total requirement. However, 
+    //it also requires the total for Electronics and Furniture to be $300 or more, which is not met. Therefore, no discount will be applied.
     public function test_applyDiscount_when_no_discount_is_available()
     {
         $cart = [
-            'subtotal' => 100,
+            'subtotal' => 500,
             'items' => [
-                ["id" => 1, "product_title" => "Laptop", "category_id" => 1, "quantity" => 1, "price" => 500]
+                ["id" => 1, "product_title" => "T-shirt", "category_id" => 2, "quantity" => 5, "price" => 100]
             ]
         ];
  
         $discountService = new DiscountService(); 
-        $result = $discountService->applyDiscount($cart); 
-
+        $result = $discountService->applyDiscount($cart);  
         // Assert
-        $this->assertEquals(100, $result['cart_total']);
-        $this->assertEquals(100, $result['final_total']);
+        $this->assertEquals(500, $result['cart_total']);
+        $this->assertEquals(500, $result['final_total']);
         $this->assertEquals(0, $result['discount_value']);
     }
 }

@@ -2,13 +2,13 @@
 	"info": {
 		"_postman_id": "22f4741e-63b3-44ad-a663-a8e03d3437e7",
 		"name": "Discount Engine Rule",
-		"description": "Take-Home Test: Discount Rule Engine.  \nScenario.  \nYour eCommerce platform needs a basic discount system where merchants can  \ncreate discounts to apply at checkout. Each discount can be:  \n● A percentage off the entire cart.  \n● A fixed amount off the entire cart.  \nYou also want the option to limit discounts to certain product categories or  \nminimum cart totals.",
+		"description": "The collection includes four different test cases:\n\nThe first discount will be applicable to all orders where the subtotal is $600 or more, as it does not check any category-related conditions because applies_to_all_categories = true.\n\nThe second discount will only be applied if the total for Electronics and Furniture is $300 or more, regardless of the total number of items purchased, even if the cart contains 10,000+ items.\n\n<img src=\"https://content.pstmn.io/75c945ad-263f-4fd8-a317-fd025cbf852f/aW1hZ2UucG5n\" width=\"568\" height=\"224\">\n\n1. **Without Discount**  \n    No discount will be applied because the subtotal is $300, and there are no available discounts in the database. Although a discount exists, it only applies if the total sum of Electronics and Furniture is $300 or more.\n    \n2. **With Discount**  \n    A discount will be applied because there is a discount available for carts with a minimum total of **$600** or more.\n    \n3. **With Category-Based Discount**  \n    A discount will be applied as the conditions are met: the minimum cart total is **$300**, and the total must include items from the **Electronics** and **Furniture** categories.\n    \n4. **Without Category-Based Discount**  \n    A discount will be applied, but not based on the category. This is because the total amount for **Electronics** and **Furniture** is **$100**, which does not meet the category-specific minimum cart total of **$300**. Instead, the general discount will be applied.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "11352614"
 	},
 	"item": [
 		{
-			"name": "discount apply",
+			"name": "Without discount",
 			"event": [
 				{
 					"listen": "test",
@@ -29,7 +29,109 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"subtotal\": 150,\r\n    \"items\": [\r\n        {\r\n            \"id\": 1,\r\n            \"product_title\": \"Laptop\",\r\n            \"category_id\": 1,\r\n            \"quantity\": 1,\r\n            \"price\": 1200.1\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"product_title\": \"Smartphone\",\r\n            \"category_id\": 1,\r\n            \"quantity\": 1,\r\n            \"price\": 800.0\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"product_title\": \"T-Shirt\",\r\n            \"category_id\": 2,\r\n            \"quantity\": 1,\r\n            \"price\": 150.75\r\n        },\r\n        {\r\n            \"id\": 4,\r\n            \"product_title\": \"Table\",\r\n            \"category_id\": 2,\r\n            \"quantity\": 1,\r\n            \"price\": 45.20\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"subtotal\": 200,\r\n    \"items\": [\r\n        {\r\n            \"id\": 1,\r\n            \"product_title\": \"Laptop\",\r\n            \"category_id\": 1,\r\n            \"quantity\": 2,\r\n            \"price\": 100\r\n        }         \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/discounts/apply",
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "With discount",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"subtotal\": 600,\r\n    \"items\": [\r\n        {\r\n            \"id\": 1,\r\n            \"product_title\": \"Laptop\",\r\n            \"category_id\": 1,\r\n            \"quantity\": 2,\r\n            \"price\": 100\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"product_title\": \"Smartphone\",\r\n            \"category_id\": 1,\r\n            \"quantity\": 1,\r\n            \"price\": 100.0\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"product_title\": \"T-Shirt\",\r\n            \"category_id\": 2,\r\n            \"quantity\": 1,\r\n            \"price\": 100\r\n        },\r\n        {\r\n            \"id\": 4,\r\n            \"product_title\": \"Table\",\r\n            \"category_id\": 3,\r\n            \"quantity\": 2,\r\n            \"price\": 100\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/discounts/apply",
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "With discount based on category",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"subtotal\": 1200,\r\n    \"items\": [\r\n        {\r\n            \"id\": 1,\r\n            \"product_title\": \"Laptop\",\r\n            \"category_id\": 1,\r\n            \"quantity\": 1,\r\n            \"price\": 100\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"product_title\": \"T-Shirt\",\r\n            \"category_id\": 2,\r\n            \"quantity\": 10,\r\n            \"price\": 100\r\n        },\r\n        {\r\n            \"id\": 4,\r\n            \"product_title\": \"Table\",\r\n            \"category_id\": 3,\r\n            \"quantity\": 1,\r\n            \"price\": 100\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/discounts/apply",
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Without discount with category",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"subtotal\": 1100,\r\n    \"items\": [\r\n        {\r\n            \"id\": 1,\r\n            \"product_title\": \"Laptop\",\r\n            \"category_id\": 1,\r\n            \"quantity\": 1,\r\n            \"price\": 100\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"product_title\": \"T-Shirt\",\r\n            \"category_id\": 2,\r\n            \"quantity\": 10,\r\n            \"price\": 100\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

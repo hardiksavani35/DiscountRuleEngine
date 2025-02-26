@@ -19,13 +19,14 @@ class CategorySpecificDiscountAvailable extends TestCase
         $response->assertStatus(200);
     }
 
+    // This discount applies because the total for Electronics (category_id = 1) and Furniture (category_id = 3) is $300.
     public function test_applyDiscount_with_category_based_discount()
     {
         $cart = [
             'subtotal' => 1300,
             'items' => [
                 ["id" => 1, "product_title" => "Smartphone", "category_id" => 1, "quantity" => 2, "price" => 100],
-                ["id" => 1, "product_title" => "T-Shirt", "category_id" => 2, "quantity" => 10, "price" => 1000],
+                ["id" => 1, "product_title" => "T-Shirt", "category_id" => 2, "quantity" => 10, "price" => 100],
                 ["id" => 1, "product_title" => "Table", "category_id" => 3, "quantity" => 1, "price" => 100]                          
             ]
         ];
