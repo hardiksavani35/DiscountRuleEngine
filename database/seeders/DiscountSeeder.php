@@ -19,7 +19,7 @@ class DiscountSeeder extends Seeder
             'name' => '10% Discount on all categories',
             'discount_type' => 'percentage',
             'amount' => 10,
-            'min_cart_total' => 1500,
+            'min_cart_total' => 600,
             'applies_to_all_categories' => true,
             'active_from' => now(),
             'active_to' => now()->addMonths(1)
@@ -30,7 +30,7 @@ class DiscountSeeder extends Seeder
             'name' => 'Fixed $100 Off – Electronics & Furniture',
             'discount_type' => 'fixed',
             'amount' => 100,
-            'min_cart_total' => 1000,
+            'min_cart_total' => 300,
             'applies_to_all_categories' => false,
             'active_from' => now(),
             'active_to' => now()->addMonths(1)
