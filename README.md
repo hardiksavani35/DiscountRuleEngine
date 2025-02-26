@@ -57,3 +57,7 @@ php artisan serve
 <p>php artisan test tests/Feature/NoDiscountAvailable.php </p>
 <p>php artisan test tests/Feature/PercentageDiscountAvailable.php</p>
 <p>php artisan test tests/Feature/CategorySpecificDiscountAvailable.php</p>
+
+![image](https://github.com/user-attachments/assets/e2f650d2-93b3-4c1a-8df4-0c64acf75408)
+![image](https://github.com/user-attachments/assets/8f4bbea4-4392-483a-8b6b-20e6b4a72139)
+
