@@ -1,23 +1,11 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-<p>I have created an e-commerce discount system that checks whether a discount will be applied and, if so, which one.</p>
+<p>I have developed an e-commerce application that checks whether a discount will be applied or not. I have managed two types of discounts: one that involves only the <b>min_cart_total</b>, and includes <b>active_from</b> and <b>active_to</b> dates; and the other that includes category checking, where the <b>min_cart_total</b> must be equal to or greater than the sum of selected category products for that discount, along with the <b>active_from</b> and <b>active_to</b> dates.</p>
 
-<p>The logic implementation is as follows:</p>
+<p>First, I fetch all the discounts that are currently active, meaning the <b>active_from</b> and <b>active_to</b> dates are between today’s date. Then, I check the category-based restrictions. I manage these restrictions using the <b>applies_to_all_categories</b> column. If this value is <b>true</b>, we don't check the category; only the <b>min_cart_total</b>, <b>active_from</b>, and <b>active_to</b> are considered. But if it’s false, I add an additional condition: the sum of all products linked to the discount's specified category must meet or exceed the <b>min_cart_total</b>. This sum is then used against the <b>min_cart_total</b>, not the <b>subtotal</b>, when <b>applies_to_all_categories</b> is false</b>. If multiple discounts are eligible, the most recent one will be applied.</p>
 
-<p><b>I have applied two types of discounts:</b></p>
+<p>After that, I prepare a response that shows which discount was applied, the subtotal, the amount to be paid, and the total discount.</p>
 
-<p><b>Discount based on all categories:</b> This discount doesn't check the category, but only the minimum cart total.</p>
-<p><b>Discount based on a specific category:</b> This discount checks the specific category assigned to it, and the sum of the products in that category must be equal to or greater than a certain value for the rule to be applied.</p>
-<p>I have used a column in the discount table called applies_to_all_categories (with values true or false):</p>
-
-<p><b>True</b> indicates that the discount will apply regardless of the category, based only on the minimum cart total.</p>
-<p><b>False</b> it means it's a category-based discount. In this case, all the products from the assigned category are added up, and the total must be equal to or greater than the minimum cart amount for the discount to apply.</p>
-
-Additionally, I have added logic to ensure that discounts are only applied if the current date is within the specified "from" and "to" date range.
-
-If multiple discounts are eligible, the most recent one will be applied.
-
-<b>NOTE:</b> When you update an item's price, make sure to update the subtotal as well. This is important because, for category-specific discounts, I calculate the total by multiplying the product quantity by the price, and then subtract the discount from the subtotal.
-
+<b>NOTE:</b> When you update an item's price in <b>Postman</b>, make sure to update the subtotal as well. This is important because, for category-specific discounts, I calculate the total by multiplying the product quantity by the price, and then subtract the discount from the subtotal.
 
 <b>To run this project, follow these steps:</b>
 
